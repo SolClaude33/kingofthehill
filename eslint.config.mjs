@@ -15,6 +15,8 @@ const eslintConfig = defineConfig([
     // Local QA captures and data (not source).
     ".shots/**",
     ".data/**",
+    // Remotion promo video (separate package)
+    "video/**",
   ]),
 ]);
 

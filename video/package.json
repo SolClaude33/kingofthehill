@@ -1,0 +1,20 @@
+{
+  "name": "koth-promo-video",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio",
+    "audio:promo": "node scripts/audio-promo.mjs && ffmpeg -loglevel error -y -i public/promo/audio/promo.wav -af \"loudnorm=I=-14:TP=-1.5:LRA=7\" -ar 44100 public/promo/audio/promo-master.wav",
+    "stills:promo": "node scripts/promo-stills.mjs --id=KothPromo",
+    "render:promo": "npm run audio:promo && remotion render KothPromo out/king-of-the-hill-promo.mp4 --crf=18",
+    "qa:promo": "node scripts/qa-promo.mjs out/king-of-the-hill-promo.mp4"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.529",
+    "@remotion/google-fonts": "4.0.529",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "remotion": "4.0.529"
+  }
+}

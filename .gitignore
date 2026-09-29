@@ -50,3 +50,8 @@ next-env.d.ts
 
 # design source files (originals, iterations) — kept locally only
 assets-src/
+
+# promo video: deps and renders stay local
+/video/node_modules/
+/video/out/
+/video/public/promo/audio/

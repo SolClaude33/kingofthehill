@@ -55,3 +55,10 @@ Avoid hard section cuts, dark "crypto dashboard" styling, rounded corners, soft 
 - GMGN rejects IPs that aren't allowlisted, and Vercel has no fixed egress IP. Production needs a static-IP proxy/VPS or a GMGN arrangement.
 - Rounds are recomputed from the fetched call outs (up to 200). For a long history, or for manual payouts, persist the winners.
 - No deploys or pushes during development. Nicol deploys on Vercel.
+
+## Promo trailer (video/)
+Code-only promo (Remotion 4 + synthesised music, no Higgsfield). It is a separate npm package in `video/`, excluded from the Next build (`tsconfig`/ESLint/`.vercelignore`).
+- Composition `KothPromo`: 1920×1080, 60 fps, 76 beats at 128.57 BPM (28 frames per beat), about 35.5 s.
+- `video/src/promo/timeline.json` drives everything: scenes, typing, SFX cues and music sections. The scenes are in `scenes.tsx` and the helpers in `lib.tsx`. Assets are copied into `video/public/promo/`.
+- Commands, run in `video/`: `npm run render:promo` (audio + render → `out/king-of-the-hill-promo.mp4`), `npm run qa:promo` (loudness, contact sheet, click frames), and `npm run stills:promo -- <beats>`.
+- Challenger names in the video are fictional. Don't use real GMGN handles.
