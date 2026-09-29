@@ -1,6 +1,6 @@
 "use client";
 
-import { GMGN_TOKEN_URL, TOKEN_ADDRESS } from "@/lib/config";
+import { GMGN_TOKEN_URL, HAS_TOKEN, TOKEN_ADDRESS } from "@/lib/config";
 import { LangSwitch, useI18n, type Key } from "@/lib/i18n";
 import { shortAddr } from "@/lib/format";
 import { CopyButton } from "./CopyButton";
@@ -45,14 +45,26 @@ export function Nav() {
           <LangSwitch />
           <div className="px-box hidden items-center bg-cloud text-ink md:flex">
             <span className="px-2 font-display text-xs font-bold tracking-wider text-ink-soft uppercase">CA</span>
-            <span className="font-display text-sm font-bold" title={TOKEN_ADDRESS}>
-              {shortAddr(TOKEN_ADDRESS)}
-            </span>
-            <CopyButton value={TOKEN_ADDRESS} label="token contract address" />
+            {HAS_TOKEN ? (
+              <>
+                <span className="font-display text-sm font-bold" title={TOKEN_ADDRESS}>
+                  {shortAddr(TOKEN_ADDRESS)}
+                </span>
+                <CopyButton value={TOKEN_ADDRESS} label="token contract address" />
+              </>
+            ) : (
+              <span className="pr-3 font-display text-sm font-bold">{t("ca_soon")}</span>
+            )}
           </div>
-          <a href={GMGN_TOKEN_URL} target="_blank" rel="noopener noreferrer" className="btn-px btn-px--sm">
-            {t("nav_callout")} <span aria-hidden>↗</span>
-          </a>
+          {HAS_TOKEN ? (
+            <a href={GMGN_TOKEN_URL} target="_blank" rel="noopener noreferrer" className="btn-px btn-px--sm">
+              {t("nav_callout")} <span aria-hidden>↗</span>
+            </a>
+          ) : (
+            <span aria-disabled="true" className="btn-px btn-px--sm">
+              {t("soon")}
+            </span>
+          )}
         </div>
       </nav>
     </header>

@@ -53,10 +53,14 @@ export function HowTo() {
                 <span className="timer-digits text-7xl leading-none text-gold [text-shadow:3px_3px_0_#2a1a0e]">{s.n}</span>
                 <h3 className="mt-3 font-display text-2xl font-bold [text-shadow:2px_2px_0_#2a1a0e]">{s.title}</h3>
                 <p className="mt-3 flex-1 text-[15px] leading-relaxed text-parchment/90">{s.body}</p>
-                {s.cta ? (
+                {s.cta && s.cta.href ? (
                   <a className="btn-px btn-px--sm mt-6 self-start" href={s.cta.href} target="_blank" rel="noopener noreferrer">
                     {s.cta.label} <span aria-hidden>↗</span>
                   </a>
+                ) : s.cta ? (
+                  <span aria-disabled="true" className="btn-px btn-px--sm mt-6 self-start">
+                    {t("soon")}
+                  </span>
                 ) : (
                   <p className="mt-6 inline-flex items-center gap-2 self-start bg-gold px-3 py-2 font-display text-sm font-bold tracking-wider text-ink uppercase">
                     {t("last_wins")}

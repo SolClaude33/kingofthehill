@@ -1,6 +1,6 @@
 import "server-only";
 import snapshot from "@/data/callouts-snapshot.json";
-import { BREAK_SECONDS, CHAIN, ROUND_SECONDS, SERVER_CACHE_MS, TOKEN_ADDRESS } from "./config";
+import { BREAK_SECONDS, CHAIN, HAS_TOKEN, ROUND_SECONDS, SERVER_CACHE_MS, TOKEN_ADDRESS } from "./config";
 import { buildState } from "./game";
 import { fetchNewCallouts, hasGmgnKeys, toCallout, type RawMessage } from "./gmgn";
 import { bridgeEnabled } from "./ingest";
@@ -33,6 +33,7 @@ const BRIDGE_STALE_MS = 30_000;
 // 2. Browser bridge (INGEST_SECRET): a userscript on gmgn.ai pushes to /api/ingest.
 // 3. Neither: replay the bundled snapshot (demo).
 async function load(now: number): Promise<GameState> {
+  if (!HAS_TOKEN) return { ...buildState({ callouts: [], now, roundSeconds: ROUND_SECONDS, breakSeconds: BREAK_SECONDS, token, source: "live" }), prelaunch: true };
   if (hasGmgnKeys()) return loadFromApi(now);
   if (bridgeEnabled()) return loadFromBridge(now);
   return snapshotState(now);

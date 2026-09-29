@@ -34,6 +34,7 @@ export type GameStatus = "live" | "crowned" | "open" | "empty" | "error";
 
 export type GameState = {
   source: "live" | "snapshot";
+  prelaunch?: boolean; // no token address configured yet
   stale: boolean;
   error?: string;
   serverNow: number;

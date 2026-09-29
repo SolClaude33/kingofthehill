@@ -1,4 +1,4 @@
-import { CHAIN, TOKEN_ADDRESS } from "@/lib/config";
+import { CHAIN, HAS_TOKEN, TOKEN_ADDRESS } from "@/lib/config";
 import { bridgeEnabled, checkSecret, parseMessages } from "@/lib/ingest";
 import { ingestCallouts } from "@/lib/state";
 
@@ -9,6 +9,8 @@ export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   if (!bridgeEnabled()) return Response.json({ error: "bridge disabled" }, { status: 404 });
   if (!checkSecret(req.headers.get("authorization"))) return Response.json({ error: "unauthorized" }, { status: 401 });
+
+  if (!HAS_TOKEN) return Response.json({ error: "no token configured yet (pre-launch)" }, { status: 409 });
 
   const body = (await req.json().catch(() => null)) as { chain?: string; token?: string; messages?: unknown } | null;
   if (!body || body.chain !== CHAIN || String(body.token).toLowerCase() !== TOKEN_ADDRESS) {

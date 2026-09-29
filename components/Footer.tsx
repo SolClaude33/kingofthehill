@@ -1,6 +1,6 @@
 "use client";
 
-import { BSCSCAN_ADDRESS_URL, FLAP_TOKEN_URL, GMGN_TOKEN_URL, TOKEN_ADDRESS } from "@/lib/config";
+import { BSCSCAN_ADDRESS_URL, FLAP_TOKEN_URL, GMGN_TOKEN_URL, HAS_TOKEN, TOKEN_ADDRESS } from "@/lib/config";
 import { shortAddr } from "@/lib/format";
 import { LangSwitch, useI18n, type Key } from "@/lib/i18n";
 import { CopyButton } from "./CopyButton";
@@ -54,11 +54,18 @@ export function Footer() {
           <p className="font-display text-xs font-bold tracking-[0.2em] text-[#ff9a3c] uppercase">{t("token")}</p>
           <div className="mt-3 inline-flex max-w-full items-center bg-cloud text-ink">
             <span className="px-3 font-display text-xs font-bold tracking-wider text-ink-soft uppercase">CA</span>
-            <code className="font-display text-sm font-bold" title={TOKEN_ADDRESS}>
-              {shortAddr(TOKEN_ADDRESS)}
-            </code>
-            <CopyButton value={TOKEN_ADDRESS} label="token contract address" />
+            {HAS_TOKEN ? (
+              <>
+                <code className="font-display text-sm font-bold" title={TOKEN_ADDRESS}>
+                  {shortAddr(TOKEN_ADDRESS)}
+                </code>
+                <CopyButton value={TOKEN_ADDRESS} label="token contract address" />
+              </>
+            ) : (
+              <span className="pr-3 font-display text-sm font-bold">{t("ca_soon")}</span>
+            )}
           </div>
+          {HAS_TOKEN ? (
           <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 font-display text-sm font-bold tracking-wide uppercase">
             <li>
               <a className="hover:text-gold" href={GMGN_TOKEN_URL} target="_blank" rel="noopener noreferrer">
@@ -76,6 +83,7 @@ export function Footer() {
               </a>
             </li>
           </ul>
+          ) : null}
         </div>
       </div>
 

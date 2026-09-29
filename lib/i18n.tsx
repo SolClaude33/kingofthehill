@@ -96,6 +96,12 @@ const en = {
 
   just_now: "just now",
   ago: "{t} ago",
+
+  soon: "Soon",
+  launching_soon: "Launching soon",
+  t_prelaunch: "Every call out resets the clock to",
+  ca_soon: "Coming soon",
+  hill_prelaunch: "The contract drops soon. The first call out on GMGN after launch takes the hill.",
 };
 
 export type Key = keyof typeof en;
@@ -186,6 +192,12 @@ const zh: Record<Key, string> = {
 
   just_now: "刚刚",
   ago: "{t}前",
+
+  soon: "即将推出",
+  launching_soon: "即将上线",
+  t_prelaunch: "每次喊单都会把计时重置为",
+  ca_soon: "即将公布",
+  hill_prelaunch: "合约即将公布。上线后 GMGN 上的第一个喊单将占领山顶。",
 };
 
 const DICTS: Record<Lang, Record<Key, string>> = { en, zh };

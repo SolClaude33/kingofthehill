@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { BSCSCAN_ADDRESS_URL, FLAP_TOKEN_URL, GMGN_TOKEN_URL } from "@/lib/config";
+import { BSCSCAN_ADDRESS_URL, FLAP_TOKEN_URL, GMGN_TOKEN_URL, HAS_TOKEN } from "@/lib/config";
 import { ago, clock, compact, shortAddr } from "@/lib/format";
 import { phaseAt } from "@/lib/game";
 import { calloutText, useI18n } from "@/lib/i18n";
@@ -26,12 +26,12 @@ export function Hero({ state, now, connection }: { state: GameState; now: number
   const crowned = status === "crowned";
   const open = status === "open";
 
-  const digits = live ? clock(phase.roundRemaining) : crowned ? clock(phase.breakRemaining) : open ? clock(roundMs) : "--:--";
+  const digits = live ? clock(phase.roundRemaining) : crowned ? clock(phase.breakRemaining) : clock(roundMs); // open / empty / pre-launch: show the round length
   const filled = live
     ? Math.ceil((phase.roundRemaining / roundMs) * SEGMENTS)
     : crowned
       ? Math.ceil((phase.breakRemaining / breakMs) * SEGMENTS)
-      : open
+      : open || state.prelaunch
         ? SEGMENTS
         : 0;
   const tone = live ? (phase.roundRemaining <= 10_000 ? "timer--danger" : phase.roundRemaining <= 60_000 ? "timer--warn" : "") : "";
@@ -52,7 +52,7 @@ export function Hero({ state, now, connection }: { state: GameState; now: number
     if (justCrowned) setBurst((n) => n + 1);
   }, [status, phase.breakRemaining]);
 
-  const label = live ? t("t_live") : crowned ? t("t_crowned") : open ? t("t_open") : t("t_empty");
+  const label = state.prelaunch ? t("t_prelaunch") : live ? t("t_live") : crowned ? t("t_crowned") : open ? t("t_open") : t("t_empty");
 
   const card =
     live && king ? (
@@ -150,6 +150,12 @@ export function Hero({ state, now, connection }: { state: GameState; now: number
 
 function Ctas({ open }: { open: boolean }) {
   const { t } = useI18n();
+  if (!HAS_TOKEN)
+    return (
+      <span aria-disabled="true" className="btn-px">
+        {t("launching_soon")}
+      </span>
+    );
   return (
     <>
       <a className="btn-px" href={GMGN_TOKEN_URL} target="_blank" rel="noopener noreferrer">
@@ -226,9 +232,7 @@ function OpenCard({ state, open }: { state: GameState; open: boolean }) {
       </div>
       <p className="mt-1 font-display text-2xl font-bold">{t("hill_empty")}</p>
       <p className="mt-2 text-[15px] leading-relaxed">
-        {state.status === "error"
-          ? t("hill_error")
-          : t("hill_empty_body")}
+        {state.prelaunch ? t("hill_prelaunch") : state.status === "error" ? t("hill_error") : t("hill_empty_body")}
       </p>
       {last ? (
         <div className="mt-5 flex items-center gap-3 border-t-4 border-dotted border-ink/20 pt-4">
@@ -247,6 +251,8 @@ function OpenCard({ state, open }: { state: GameState; open: boolean }) {
 
 function SourceBadge({ state, connection }: { state: GameState; connection: Connection }) {
   const { t } = useI18n();
+  if (state.prelaunch)
+    return <span className="px-box bg-gold px-2 py-0.5 font-display text-xs font-bold tracking-widest uppercase">{t("launching_soon")}</span>;
   if (connection === "reconnecting" || state.stale)
     return <span className="px-box bg-gold px-2 py-0.5 font-display text-xs font-bold tracking-widest uppercase">{t("reconnecting")}</span>;
   if (state.source === "snapshot")

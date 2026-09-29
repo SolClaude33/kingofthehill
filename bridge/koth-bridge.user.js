@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         King of the Hill — GMGN call out bridge
 // @namespace    koth
-// @version      1.3.0
+// @version      1.4.0
 // @description  Reads the token's call outs from gmgn.ai every few seconds and sends them to the King of the Hill site.
 // @match        https://gmgn.ai/*
 // @grant        GM_xmlhttpRequest
@@ -104,6 +104,13 @@
       if (!game || Date.now() - gameAt > 60000) {
         game = await getConfig();
         gameAt = Date.now();
+      }
+      // Pre-launch: the site has no token address yet. Wait and re-check.
+      if (!game.token) {
+        game = null;
+        show("waiting for the CA (pre-launch)");
+        wait = 30000;
+        return;
       }
       // Same feed twice: GMGN translates display_content into app_lang.
       const read = async (lang) => {
